@@ -1,0 +1,25 @@
+{
+  "name": "movie-tracker-project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jemwhale/movie-tracker-project.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jemwhale/movie-tracker-project/issues"
+  },
+  "homepage": "https://github.com/jemwhale/movie-tracker-project#readme",
+  "dependencies": {
+    "express": "^4.18.1",
+    "jest": "^28.1.3",
+    "sequelize": "^6.21.3",
+    "sqlite3": "^5.0.11"
+  }
+}
