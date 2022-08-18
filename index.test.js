@@ -154,5 +154,17 @@ Show.belongsToMany(User, {through: 'watched-list'});
 
         expect(result.length).toEqual(3)
     });
+
+    test('can find all shows of one genre', async () => {
+        let allShows = await Show.findAll() 
+        let result = allShows.filter((x) => {
+            if(x.genre.includes('Comedy')){
+                return true
+            }
+            
+        })
+        console.log(result)
+        expect(result.length).toEqual(3)
+    });
         
 })
