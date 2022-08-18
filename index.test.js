@@ -1,5 +1,9 @@
 const {db} = require('./db')
-const {Show, User} = require('./models/index')
+const {Show, User, WatchedList} = require('./models/index')
+const { Op } = require('sequelize');
+
+User.belongsToMany(Show, {through: 'watched-list'});
+Show.belongsToMany(User, {through: 'watched-list'});
 
   describe('Models', () => {
 
@@ -12,37 +16,107 @@ const {Show, User} = require('./models/index')
         let show1 = await Show.create({
             title: 'Atlanta',
             genre: 'Comedy',
-            rating: 10,
-            status: false
         })
         expect(show1.genre).toEqual('Comedy')
     });
 
-    test('can create a Show with a rating between 0-10 only', async () => {
-            try{
-                await Show.create({
-                    title: 'Rick and Morty',
-                    genre: 'Comedy',
-                    rating: 100,
-                    status: false
-                })
-        }catch(err){
-            expect(err.message).toEqual('Validation error: Rating needs to be out of 10!')
-        }
-        try{
-            await Show.create({
-                title: 'Eatenders',
-                genre: 'Trash',
-                rating: -500,
-                status: false
+    test('can create a new User', async () => {
+        let user1 = await User.create({
+            name: 'Jack',
+            email: 'jack@jack.jack',
         })
-        }catch(err){
-            expect(err.message).toEqual('Validation error: Rating needs to be out of 10!')
-        }
+        expect(user1.name).toEqual('Jack')
     });
 
-    // test('can create a new User', async () => {
-    //     expect().toEqual()
-    // });
+    test('can add multiple shows to a user', async () => {
+        let user1 = await User.create({
+            name: 'Name',
+            email: 'name@yahoo.co.uk',
+        })
+        let show1 = await Show.create({
+            title: 'Show',
+            genre: 'Comedy',
+        })
+        let show2 = await Show.create({
+            title: 'Show Time Baby',
+            genre: 'Drama',
+        })
+        await user1.addShow(show1)
+        await user1.addShow(show2)
+        let howMany = await user1.getShows()
+        expect(howMany.length).toEqual(2)
+
+    });
+
+    test('can add a show to a user with rating only between 0-10', async () => {
+        let user1 = await User.create({
+            name: 'A Person',
+            email: 'personlegend@hotmail.co.uk',
+        })
+        let show1 = await Show.create({
+            title: 'Banger',
+            genre: 'Documentary',
+        })
+        let show2 = await Show.create({
+            title: 'Something',
+            genre: 'Documentary',
+        })
+        let show3 = await Show.create({
+            title: 'Another Show',
+            genre: 'Documentary',
+        })
+
+        try{
+            await user1.addShow(show1, {through: {rating: 100}})
+        }catch(err){
+            expect(err.errors[0].errors.errors[0].message).toEqual('Rating needs to be out of 10!')
+        }
+        try{
+            await user1.addShow(show2, {through: {rating: -5}})
+        }catch(err){
+            expect(err.errors[0].errors.errors[0].message).toEqual('Rating needs to be out of 10!')
+        }
+        await user1.addShow(show3, {through: {rating: 7}})
+        let howMany1 = await user1.getShows()
+        expect(howMany1.length).toEqual(1)
+    });
+
+    test('can find all rated shows from a user', async () => {
+        let user1 = await User.create({
+            name: 'Dave',
+            email: 'david@hotmail.co.uk',
+        })
+        let show1 = await Show.create({
+            title: 'Lost',
+            genre: 'Documentary',
+        })
+        let show2 = await Show.create({
+            title: 'The News',
+            genre: 'Comedy',
+        })
+        let show3 = await Show.create({
+            title: 'Monday Night Football',
+            genre: 'Sport',
+        })
+        let show4 = await Show.create({
+            title: 'Darts',
+            genre: 'Sport',
+        })
+        await user1.addShow(show1, {through: {rating: 8}})
+        await user1.addShow(show2, {through: {rating: 7}})
+        await user1.addShow(show3, {through: {rating: 9}})
+        await user1.addShow(show4)
+ 
+        let result = await WatchedList.findAll({
+            where: {
+                userid: user1.id,
+                rating: {
+                    [Op.gt]: 7
+                }
+            }
+        })
+
+        expect(result.length).toEqual(2)
+    });
         
 })

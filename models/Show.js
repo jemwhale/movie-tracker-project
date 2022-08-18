@@ -1,18 +1,13 @@
 const {db} = require('../db');
-const { Sequelize, DataTypes } = require('sequelize');
+const { Sequelize, DataTypes} = require('sequelize');
 
 const Show = db.define('show', {
   title: DataTypes.STRING,
   genre: DataTypes.STRING,
-  status: DataTypes.BOOLEAN,
-  rating: {  
-    type: DataTypes.NUMBER,
-    validate: {
-        checkLength(val){
-            if (val < 0 || val > 10) throw new Error('Rating needs to be out of 10!')
-        }
-    }
-}
+  status: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: true
+  }
 });
 
 module.exports = {Show};
