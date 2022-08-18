@@ -3,10 +3,10 @@ const { Sequelize, DataTypes} = require('sequelize');
 
 const Show = db.define('show', {
   title: DataTypes.STRING,
-  genre: DataTypes.STRING,
+  genre: DataTypes.ARRAY(DataTypes.DECIMAL),
   status: {
     type: DataTypes.BOOLEAN,
-    defaultValue: true
+    defaultValue: false
   }
 });
 

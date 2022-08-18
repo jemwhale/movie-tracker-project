@@ -15,9 +15,9 @@ Show.belongsToMany(User, {through: 'watched-list'});
     test('can create a new Show ', async () => {
         let show1 = await Show.create({
             title: 'Atlanta',
-            genre: 'Comedy',
+            genre: ['Comedy', 'Drama', 'Surrealism'],
         })
-        expect(show1.genre).toEqual('Comedy')
+        expect(show1.genre[0]).toEqual('Comedy')
     });
 
     test('can create a new User', async () => {
@@ -35,11 +35,11 @@ Show.belongsToMany(User, {through: 'watched-list'});
         })
         let show1 = await Show.create({
             title: 'Show',
-            genre: 'Comedy',
+            genre: ['Comedy'],
         })
         let show2 = await Show.create({
             title: 'Show Time Baby',
-            genre: 'Drama',
+            genre: ['Drama'],
         })
         await user1.addShow(show1)
         await user1.addShow(show2)
@@ -55,15 +55,15 @@ Show.belongsToMany(User, {through: 'watched-list'});
         })
         let show1 = await Show.create({
             title: 'Banger',
-            genre: 'Documentary',
+            genre: ['Documentary'],
         })
         let show2 = await Show.create({
             title: 'Something',
-            genre: 'Documentary',
+            genre: ['Documentary'],
         })
         let show3 = await Show.create({
             title: 'Another Show',
-            genre: 'Documentary',
+            genre: ['Documentary'],
         })
 
         try{
@@ -88,19 +88,19 @@ Show.belongsToMany(User, {through: 'watched-list'});
         })
         let show1 = await Show.create({
             title: 'The Thing',
-            genre: 'Horror',
+            genre: ['Horror'],
         })
         let show2 = await Show.create({
             title: 'Terminator 2',
-            genre: 'Action',
+            genre: ['Action'],
         })
         let show3 = await Show.create({
             title: 'RoboCop',
-            genre: 'Action',
+            genre: ['Action'],
         })
         let show4 = await Show.create({
             title: 'Up',
-            genre: 'Family',
+            genre: ['Family'],
         })
         await user1.addShow(show1, {through: {rating: 4}})
         await user1.addShow(show2, {through: {rating: 5}})
@@ -124,19 +124,19 @@ Show.belongsToMany(User, {through: 'watched-list'});
         })
         let show1 = await Show.create({
             title: 'Lost',
-            genre: 'Documentary',
+            genre: ['Documentary'],
         })
         let show2 = await Show.create({
             title: 'The News',
-            genre: 'Comedy',
+            genre: ['Comedy'],
         })
         let show3 = await Show.create({
             title: 'Monday Night Football',
-            genre: 'Sport',
+            genre: ['Sport'],
         })
         let show4 = await Show.create({
             title: 'Darts',
-            genre: 'Sport',
+            genre: ['Sport'],
         })
         await user1.addShow(show1, {through: {rating: 8}})
         await user1.addShow(show2, {through: {rating: 7}})
