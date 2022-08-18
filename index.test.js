@@ -1,6 +1,6 @@
 const {db} = require('./db')
 const {Show, User, WatchedList} = require('./models/index')
-const { Op } = require('sequelize');
+const { Op, DataTypes } = require('sequelize');
 
 User.belongsToMany(Show, {through: 'watched-list'});
 Show.belongsToMany(User, {through: 'watched-list'});
@@ -81,6 +81,42 @@ Show.belongsToMany(User, {through: 'watched-list'});
         expect(howMany1.length).toEqual(1)
     });
 
+    test('can find all shows from a user', async () => {
+        let user1 = await User.create({
+            name: 'Paul',
+            email: 'email@bhighv.com',
+        })
+        let show1 = await Show.create({
+            title: 'The Thing',
+            genre: 'Horror',
+        })
+        let show2 = await Show.create({
+            title: 'Terminator 2',
+            genre: 'Action',
+        })
+        let show3 = await Show.create({
+            title: 'RoboCop',
+            genre: 'Action',
+        })
+        let show4 = await Show.create({
+            title: 'Up',
+            genre: 'Family',
+        })
+        await user1.addShow(show1, {through: {rating: 4}})
+        await user1.addShow(show2, {through: {rating: 5}})
+        await user1.addShow(show3, {through: {rating: 6}})
+        await user1.addShow(show4)
+ 
+        let result = await WatchedList.findAll({
+            where: {
+                userid: user1.id
+            }
+        })
+
+        expect(result.length).toEqual(4)
+    });
+        
+
     test('can find all rated shows from a user', async () => {
         let user1 = await User.create({
             name: 'Dave',
@@ -111,12 +147,12 @@ Show.belongsToMany(User, {through: 'watched-list'});
             where: {
                 userid: user1.id,
                 rating: {
-                    [Op.gt]: 7
+                    [Op.gt]: -1
                 }
             }
         })
 
-        expect(result.length).toEqual(2)
+        expect(result.length).toEqual(3)
     });
         
 })
