@@ -1,5 +1,5 @@
 const {db} = require('../db');
-const { Sequelize, DataTypes, Op } = require('sequelize');
+const { Sequelize, DataTypes } = require('sequelize');
 
 const WatchedList = db.define('watched-list', {
     rating: {  
