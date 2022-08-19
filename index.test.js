@@ -15,7 +15,7 @@ Show.belongsToMany(User, {through: 'watched-list'});
     test('can create a new Show ', async () => {
         let show1 = await Show.create({
             title: 'Atlanta',
-            genre: ['Comedy', 'Drama', 'Surrealism'],
+            genre: ['Comedy', 'Drama'],
         })
         expect(show1.genre[0]).toEqual('Comedy')
     });
@@ -165,6 +165,41 @@ Show.belongsToMany(User, {through: 'watched-list'});
         })
         console.log(result)
         expect(result.length).toEqual(4)
+    });
+
+    test('can update a show rating for a user', async () => {
+        
+        const found = await WatchedList.findOne({
+            where: {
+                userId: 2,
+                showId: 3
+            }
+        })
+
+        found.update({
+            rating: 5
+        })
+
+        expect(found.rating).toEqual(5)
+    });
+
+    test('can add genres to a show without duplicating', async () => {
+        const newGenres = ['Surrealism', 'Drama', 'Comedy']
+        const foundShow = await Show.findOne({
+            where: {
+                title: 'Atlanta'
+            }
+        })
+        let noDuplicates = foundShow.genre.split(',')
+        for (each in newGenres){
+            if (!noDuplicates.includes(newGenres[each])){
+                noDuplicates.push(newGenres[each])
+            }
+        }
+        foundShow.update({
+            genre: noDuplicates
+        })
+        expect(foundShow.genre).toEqual(['Comedy', 'Drama', 'Surrealism'])
     });
         
 })
