@@ -10,6 +10,6 @@ const WatchedList = db.define('watched-list', {
             }
         }
     }
-});
+},{timestamps: false});
 
 module.exports = {WatchedList};

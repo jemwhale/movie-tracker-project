@@ -14,32 +14,32 @@ Show.belongsToMany(User, {through: 'watched-list'});
 
     test('can create a new Show ', async () => {
         let show1 = await Show.create({
-            title: 'Atlanta',
-            genre: ['Comedy', 'Drama'],
+            title: 'atlanta',
+            genre: ['comedy', 'drama'],
         })
-        expect(show1.genre[0]).toEqual('Comedy')
+        expect(show1.genre[0]).toEqual('comedy')
     });
 
     test('can create a new User', async () => {
         let user1 = await User.create({
-            name: 'Jack',
+            name: 'jack',
             email: 'jack@jack.jack',
         })
-        expect(user1.name).toEqual('Jack')
+        expect(user1.name).toEqual('jack')
     });
 
     test('can add multiple shows to a user', async () => {
         let user1 = await User.create({
-            name: 'Name',
+            name: 'name',
             email: 'name@yahoo.co.uk',
         })
         let show1 = await Show.create({
-            title: 'Show',
-            genre: ['Comedy'],
+            title: 'show',
+            genre: ['comedy'],
         })
         let show2 = await Show.create({
-            title: 'Show Time Baby',
-            genre: ['Drama'],
+            title: 'show time baby',
+            genre: ['drama'],
         })
         await user1.addShow(show1)
         await user1.addShow(show2)
@@ -50,20 +50,20 @@ Show.belongsToMany(User, {through: 'watched-list'});
 
     test('can add a show to a user with rating only between 0-10', async () => {
         let user1 = await User.create({
-            name: 'A Person',
+            name: 'a person',
             email: 'personlegend@hotmail.co.uk',
         })
         let show1 = await Show.create({
-            title: 'Banger',
-            genre: ['Documentary', 'Action'],
+            title: 'banger',
+            genre: ['documentary', 'action'],
         })
         let show2 = await Show.create({
-            title: 'Something',
-            genre: ['Documentary', 'Sport'],
+            title: 'something',
+            genre: ['documentary', 'sport'],
         })
         let show3 = await Show.create({
-            title: 'Another Show',
-            genre: ['Documentary'],
+            title: 'another show',
+            genre: ['documentary'],
         })
 
         try{
@@ -83,24 +83,24 @@ Show.belongsToMany(User, {through: 'watched-list'});
 
     test('can find all shows from a user', async () => {
         let user1 = await User.create({
-            name: 'Paul',
+            name: 'paul',
             email: 'email@bhighv.com',
         })
         let show1 = await Show.create({
-            title: 'The Thing',
-            genre: ['Horror'],
+            title: 'the thing',
+            genre: ['horror'],
         })
         let show2 = await Show.create({
-            title: 'Terminator 2',
-            genre: ['Action', 'Sci-Fi'],
+            title: 'terminator 2',
+            genre: ['action', 'sci-fi'],
         })
         let show3 = await Show.create({
-            title: 'RoboCop',
-            genre: ['Action', 'Sci-Fi'],
+            title: 'robocop',
+            genre: ['action', 'sci-fi'],
         })
         let show4 = await Show.create({
-            title: 'Up',
-            genre: ['Family', 'Comedy'],
+            title: 'up',
+            genre: ['family', 'comedy'],
         })
         await user1.addShow(show1, {through: {rating: 4}})
         await user1.addShow(show2, {through: {rating: 5}})
@@ -119,24 +119,24 @@ Show.belongsToMany(User, {through: 'watched-list'});
 
     test('can find all rated shows from a user', async () => {
         let user1 = await User.create({
-            name: 'Dave',
+            name: 'dave',
             email: 'david@hotmail.co.uk',
         })
         let show1 = await Show.create({
-            title: 'Lost',
-            genre: ['Drama', 'Mystery'],
+            title: 'lost',
+            genre: ['drama', 'mystery'],
         })
         let show2 = await Show.create({
-            title: 'The News',
-            genre: ['Comedy'],
+            title: 'the news',
+            genre: ['comedy'],
         })
         let show3 = await Show.create({
-            title: 'Monday Night Football',
-            genre: ['Sport'],
+            title: 'monday night football',
+            genre: ['sport'],
         })
         let show4 = await Show.create({
-            title: 'Darts',
-            genre: ['Sport'],
+            title: 'darts',
+            genre: ['sport'],
         })
         await user1.addShow(show1, {through: {rating: 8}})
         await user1.addShow(show2, {through: {rating: 7}})
@@ -158,12 +158,11 @@ Show.belongsToMany(User, {through: 'watched-list'});
     test('can find all shows of one genre', async () => {
         let allShows = await Show.findAll() 
         let result = allShows.filter((x) => {
-            if(x.genre.includes('Comedy')){
+            if(x.genre.includes('comedy')){
                 return true
             }
             
         })
-        console.log(result)
         expect(result.length).toEqual(4)
     });
 
@@ -184,10 +183,10 @@ Show.belongsToMany(User, {through: 'watched-list'});
     });
 
     test('can add genres to a show without duplicating', async () => {
-        const newGenres = ['Surrealism', 'Drama', 'Comedy']
+        const newGenres = ['surrealism', 'drama', 'comedy']
         const foundShow = await Show.findOne({
             where: {
-                title: 'Atlanta'
+                title: 'atlanta'
             }
         })
         let noDuplicates = foundShow.genre.split(',')
@@ -199,7 +198,7 @@ Show.belongsToMany(User, {through: 'watched-list'});
         foundShow.update({
             genre: noDuplicates
         })
-        expect(foundShow.genre).toEqual(['Comedy', 'Drama', 'Surrealism'])
+        expect(foundShow.genre).toEqual(['comedy', 'drama', 'surrealism'])
     });
         
 })
